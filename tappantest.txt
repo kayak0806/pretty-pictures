@@ -1,1 +1,9 @@
+<<<<<<< HEAD
 now this is changed
+=======
+This is a stupid test.
+
+
+This is also a stupid test
+
+>>>>>>> 17450cefe649b622ca0b3f1600332cb09153ae1e
