@@ -8,7 +8,7 @@ Creates a body that stores:
 imporrt pyglet
 from point import Point
 
-class Body(pyglet.sprite.Sprite): # Using the Sprite class will let us animate objects with pyglet using Sprite.Update(). See: http://pyglet.org/doc/programming_guide/noisy.py
+class Body(pyglet.sprite.Sprite):
     def __init__(self, def_points, density=1):
         self.def_points=def_points
         self.p = density
