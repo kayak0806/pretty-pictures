@@ -1,4 +1,5 @@
 import pyglet
+import pypy
 from pyglet.window import mouse
 
 window = pyglet.window.Window()
