@@ -63,7 +63,7 @@ class Ball(pyglet.sprite.Sprite):
     def __init__(self):
         x = random.random() * (window.width - self.width)
         y = random.random() * (window.height - self.height)
-
+        # runs the Sprite constructor, adding to the balls_batch
         super(Ball, self).__init__(self.ball_image, x, y, batch=balls_batch)
 
         self.dx = (random.random() - 0.5) * 1000
