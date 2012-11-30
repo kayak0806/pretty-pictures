@@ -1,3 +1,13 @@
+'''
+
+Simple environment/body animation code.
+
+Environments contain a batch of drawable objects (bodies). Environment.draw() draws everything in the environment.
+
+bodies contain a tuple of points
+
+Rachel Boy, Slater, Diana for room-arranger + collision-checking
+'''
 import pyglet
 
 window = pyglet.window.Window()
@@ -6,6 +16,9 @@ class Environment(object):
     def __init__(self):
         self.obj_ls = []
         self.obj_batch = pyglet.graphics.Batch()
+        
+    def draw(self):
+        self.obj_batch.draw()
         
 environment = Environment()
         
@@ -20,28 +33,31 @@ class body(object):
             self.vertex_list = environment.obj_batch.add(len(points)/2,
                 pyglet.gl.GL_POLYGON, None,('v2f',points),('c3B',color)
             )
+            
+        self.points = points
         
-        #self.vertex_list = environment.obj_batch.add(len(points)/2,
-        #    pyglet.gl.GL_POLYGON, None,
-        #    ('v2f',points)
-        #    )
         
-        #= pyglet.graphics.vertex_list(len(points)/2,
-    #('v2f', points)
-    #    )
-        
-    def draw(self,arg=pyglet.gl.GL_POLYGON):
-        self.vertex_list.draw(arg)
+    # Not relevant with the current setup: we always draw from the Environment's obj_batch, which draws objects (vector lists) as they were added. This would be relevant if we wanted to draw objects individually, without calling their vector_lists. 
+    #def draw(self,arg=pyglet.gl.GL_POLYGON):
+    #    self.vertex_list.draw(arg)
         
     def update(self,dt):
-        for i in range(len(self.vertex_list.vertices)):
+        points = ()
+        for i in range(len(self.points)):
             #print self.vertex_list.vertices[i]
-            self.vertex_list.vertices[i] = self.vertex_list.vertices[i] + 10
+            #self.vertex_list.vertices[i] = self.vertex_list.vertices[i] + 10
+            points += (self.points[i] + 10,)
+            
+        self.points = points
+        self.refresh_vertices()
+        
+    def refresh_vertices(self):
+        self.vertex_list.vertices = self.points
 
 @window.event
 def on_draw():
     window.clear()
-    environment.obj_batch.draw()
+    environment.draw()
 
 def update(dt):
     for obj in environment.obj_ls:
