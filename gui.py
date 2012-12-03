@@ -16,7 +16,15 @@ class Circle(object):
         self.radius = r
 
 mycircle = Circle()
+
+class Line(object):
+    def __init__(self, x1=0, y1=0, x2=10, y2=10):
+        self.x1=x1
+        self.x2=x2
+        self.y1=y1
+        self.y2=y2
  
+line=Line()
 
 def update(dt):
     for obj in environment.obj_ls:
@@ -29,19 +37,21 @@ def on_mouse_motion(x, y, dx, dy):
 
 @window.event
 def on_mouse_press(x, y, button, modifiers):
-    pass
+    line.x1 = x
+    line.y1 = y
 
 @window.event
 def on_mouse_release(x, y, button, modifiers):
-    print mycircle.x, mycircle.y, mycircle.radius
-    pyglet.graphics.draw(1, pyglet.gl.GL_POINTS, ('v2i', (mycircle.x, mycircle.y)))
+    pass
 
 @window.event
 def on_mouse_drag(x, y, dx, dy, buttons, modifiers):
-    mycircle.x = x
-    mycircle.y = y
-    r = ((x-dx)**2 + (y-dy)**2)**.5
-    mycircle.radius = r
+    line.x2 = x
+    line.y2 = y
+    print line.x1, line.y1, line.x2, line.y2
+    pyglet.graphics.draw(2, pyglet.gl.GL_LINES, 
+    ('v2f', (line.x1, line.y1, line.x2, line.y2)))
+
 
 @window.event
 def on_draw():
@@ -49,9 +59,12 @@ def on_draw():
     environment.obj_batch.draw()
 
 
-environment.obj_ls.append(mycircle)
+dt = 1/30.
+pyglet.clock.schedule_interval(update, dt) # Schedules updates for all objects every 30th of a second (Float)
 
 
+#def update(dt):
+    
 
 
 if __name__ == "__main__":

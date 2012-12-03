@@ -65,3 +65,5 @@ environment.obj_ls.append(body1)
 
 if __name__ == "__main__":
     pyglet.app.run()
+
+
