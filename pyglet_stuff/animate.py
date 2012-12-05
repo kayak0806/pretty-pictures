@@ -8,7 +8,7 @@ class Environment(object):
         self.obj_batch = pyglet.graphics.Batch()
         
 environment = Environment()
-        
+       
 class body(object):
     
     def __init__(self,environment, points = (0,0),color = None):
