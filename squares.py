@@ -3,7 +3,7 @@ import pyglet
 
 class Square(object): #blue square
     ''' A blue Square'''
-    def __init__(self,environment=None,x,y):
+    def __init__(self,environment,x,y):
         self.envi = environment
         self.velocity = -1
         self.active = False
@@ -11,10 +11,9 @@ class Square(object): #blue square
         self.hznt1 = y
         self.vert2 = x
         self.hznt2 = y
-        if enviroment:
-            points = self.get_points()
-            self.vert = environment.batch.add(4, pyglet.gl.GL_QUADS, None, 
-                        ('v2i', points),('c3B', (0,0,255,0,0,255,0,0,255,0,0,255)))
+        points = self.get_points()
+        self.vert = environment.batch.add(4, pyglet.gl.GL_QUADS, None, 
+                    ('v2i', points),('c3B', (0,0,255,0,0,255,0,0,255,0,0,255)))
 
     def resize(self,x,y):
         ''' changes the size of the square by moving p1 to (x,y)'''
