@@ -53,6 +53,18 @@ class Square(Body):
         self.heading += angle
         
         self.vert.vertices = self.get_points()
+    
+    def shift(self,dx,dy):
+        x,y = self.center.x, self.center.y
+        self.center = Point(x+dx,y+dy)
+        self.vert.vertices = self.get_points()
+
+    def move(self,x,y):
+        self.center = Point(x,y)
+        self.vert.vertices = self.get_points()
+
+    def update(self, dt):
+        self.vert.vertices = self.get_points()
 
     def get_points(self):
         dx = math.cos(self.heading)/(self.size*math.sqrt(2))
