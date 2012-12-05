@@ -4,6 +4,7 @@ from copy import deepcopy
 import math
 
 class Body(object):
+    ''' includes move and shift methods'''
     def __init__(self, environment, x=0,y=0, heading=0, velocity = 0, location=Point(0,0), density=1):
         self.environment = environment
         self.heading = 0
@@ -12,12 +13,18 @@ class Body(object):
         self.density = density
         self.color = (0,0,255,0,0,255,0,0,255,0,0,255)
         self.active = False
+ 
+    def move(self,x,y):
+        self.center = Point(x,y)
+        self.vert.vertices = self.get_points()
+
+    def shift(self,dx,dy):
+        x,y = self.center.x, self.center.y
+        self.center = Point(x+dx,y+dy)
+        self.vert.vertices = self.get_points()
 
     def resize(self,x,y):
         pass
-
-    def relocate(self, location):
-        self.center=location
 
     def get_points(self):
         pass
@@ -29,14 +36,14 @@ class Body(object):
         xcenter = self.center.x
         ycenter = self.center.y
 
-        return sqrt((xcenter - x)**2 + (ycenter-y)**2)
+        return math.sqrt((xcenter - x)**2 + (ycenter-y)**2)
 
     def rotate(self,angle):
         pass
 
 class Square(Body):
-    def __init__(self, enviroment, x,y):
-        Body.__init__(environment,location=Point(x,y))
+    def __init__(self, environment, x,y):
+        Body.__init__(self,environment,location=Point(x,y))
         self.size = 0
 
         points = self.get_points()        
@@ -54,22 +61,19 @@ class Square(Body):
         
         self.vert.vertices = self.get_points()
     
-    def shift(self,dx,dy):
-        x,y = self.center.x, self.center.y
-        self.center = Point(x+dx,y+dy)
-        self.vert.vertices = self.get_points()
-
-    def move(self,x,y):
-        self.center = Point(x,y)
-        self.vert.vertices = self.get_points()
 
     def update(self, dt):
-        self.vert.vertices = self.get_points()
+#        self.vert.vertices = self.get_points()
+        if self.active:
+            pass
 
     def get_points(self):
-        dx = math.cos(self.heading)/(self.size*math.sqrt(2))
-        dy = math.sin(self.heading)/(self.size*math.sqrt(2))
-
+        if self.size>0:
+            dx = math.cos(self.heading+0.785389)*(self.size*math.sqrt(2))
+            dy = math.sin(self.heading+0.785389)*(self.size*math.sqrt(2))
+        else:
+            dx = 0
+            dy = 0
         x = self.center.x
         y = self.center.y
 
@@ -81,10 +85,10 @@ class Square(Body):
         points = [x1,y1,x2,y2,x3,y3,x4,y4]
         
         for i in range(len(points)):
-            points[i] = int(points[i]))
+            points[i] = int(points[i])
         return points
-'''
-class Circle(Body)
+
+class Circle(Body):
     def __init__(self, environment, x, y):
         Body.__init__(environment, location=Point(x,y))
         self.radius = 0
@@ -94,11 +98,17 @@ class Circle(Body)
                     ('v2i', points),('c3B', self.color))
         
     def get_points(self):
+        r = self.radius
         points = []
-        for angle in range(60)*6:
-            
+        for i in range(40):
+            i = i*2
+            angle = i*360/20
+            points[i], points[i+1] = r*math.cos(angle), r*math.sin(angle)
+
+        for i in range(len(points)):
+            points[i] = int(points[i])
+        return points
+    
 
 
 
-
-'''
