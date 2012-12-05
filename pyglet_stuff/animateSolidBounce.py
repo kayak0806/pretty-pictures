@@ -49,10 +49,10 @@ class body(object):
             #print CentrpAccel*cos(theta)
             #print self.gravity*sin(theta)*sin(theta)
             print degrees(atan(self.Tempddx/self.Tempddy))
-            self.dx=self.dx+self.Tempddx*.1
-            self.dy=self.dy+self.Tempddy*.1
+            self.dx=self.dx+self.Tempddx*.9
+            self.dy=self.dy+self.Tempddy*.9
         elif not self.isFixed:
-            self.dy=self.dy-self.gravity*.001
+            self.dy=self.dy-self.gravity*.1
         for i in range(len(self.vertex_list.vertices)):
             if i%2==0 and (self.vertex_list.vertices[i]<0 or self.vertex_list.vertices[i]>500):
                 self.changeX=True
@@ -97,7 +97,7 @@ def update(dt):
         obj.update(dt)
         
 
-dt = 1/60.
+dt = 1/30.
 pyglet.clock.schedule_interval(update, dt) # Schedules updates for all objects every 60th of a second (Float)
 
 x=100
