@@ -7,10 +7,14 @@ Creates points that stores
 '''
 import pyglet
 
-class Point(pyglet.sprite.Sprite): # Using the Sprite class will let us animate objects with pyglet using Sprite.Update(). See: http://pyglet.org/doc/programming_guide/noisy.py
-    def __init__(self,car_position,rot_position,car_velocity,rot_velocity):
-        self.car_position=car_position      # list [x,y,z]
-        self.rot_position=rot_position      # yaw or list [yaw, pitch, roll]
-        self.car_velocity=car_velocity      # list [x,y,z]
-        self.rot_velocity=rot_velocity	    # yaw or list [yaw, pitch, roll]
-		
+class Point(object):
+    def __init__(self,x=0,y=0,z=0):
+        self.x = x
+        self.y = y
+        self.z = z
+        
+    def __print__(self):
+        return "(%.2d,%.2d,%.2d)"%(self.x,self.y,self.z)
+        
+    def __add__(self,other):
+        return Point(self.x + other.x,self.y + other.y,self.z + other.z)
