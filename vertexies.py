@@ -1,7 +1,6 @@
 import pyglet
 from pyglet.window import mouse
 from bodies import Square, Circle
-from button import Button
 
 window = pyglet.window.Window()
 
@@ -15,7 +14,6 @@ class Environment(object):
         
 environment = Environment()
 
-environment.button_list.append(Button(environment, window.width-50, 300))
 
 @window.event
 def on_draw():
