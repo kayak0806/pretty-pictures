@@ -10,7 +10,7 @@ class Environment(object):
         self.batch = pyglet.graphics.Batch()
     def draw(self):
         self.batch.draw()
-        self.button_batch.draw()
+        
         
 environment = Environment()
 
