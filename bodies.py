@@ -74,8 +74,8 @@ class Body(object):
 class Square(Body):
     def __init__(self, environment, x,y):
         Body.__init__(self,environment,x,y)
-        self.size = 50
-        self.heading = math.pi/6
+        self.size = 0
+        self.heading = 0
 
         points = self.get_points()
         self.color = (0,0,255)*(len(points)/2)   
