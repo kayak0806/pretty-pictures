@@ -28,24 +28,9 @@ class Body(object):
     def angle(self, dx, dy):
         x = float(dx - self.center.x)
         y = float(dy - self.center.y)
-        '''
-        if y>=0:
-            if x ==0:
-                theta = math.pi/2
-            elif x > 0:
-                theta = math.atan(y/x)
-            elif x < 0:
-                theta = math.atan(y/x)+math.pi
-        elif y<0:
-            if x ==0:
-                theta = math.pi+math.pi/2
-            elif x > 0:
-                theta = math.atan(y/x)+2*math.pi
-            elif x < 0:
-                theta = math.atan(y/x)+math.pi
-        return theta
-        '''
+
         return math.atan2(y,x)
+
     def move(self,x,y):
         self.center = Point(x,y)
 
@@ -54,7 +39,10 @@ class Body(object):
         self.center = Point(x+dx,y+dy)
 
     def rotate(self, angle):
-        self.heading = angle        
+        self.heading = angle
+
+    def twist(self, dangle):
+        self.heading += dangle
 
     def set_size(self, x, y): # can rewrite
         self.resize(x,y)
@@ -86,7 +74,7 @@ class Square(Body):
         self.resize(x,y)
         angle = self.angle(x,y)
         self.rotate(angle)
-        print angle, self.heading
+        self.vert.vertices = self.get_points()
 
     def resize(self,x,y):
         r = self.distance(x,y)
