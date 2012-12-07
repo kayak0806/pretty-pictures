@@ -26,6 +26,7 @@ class Body(object):
     def angle(self, dx, dy):
         x = float(dx - self.center.x)
         y = float(dy - self.center.y)
+        '''
         if y>=0:
             if x ==0:
                 theta = math.pi/2
@@ -41,7 +42,8 @@ class Body(object):
             elif x < 0:
                 theta = math.atan(y/x)+math.pi
         return theta
- 
+        '''
+        return math.atan2(y,x)
     def move(self,x,y):
         self.center = Point(x,y)
 
