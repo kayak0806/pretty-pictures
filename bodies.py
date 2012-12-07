@@ -3,6 +3,8 @@ from point import Point
 from copy import deepcopy
 import math
 
+'''Run vertexies.py'''
+
 class Body(object):
     ''' includes move, shift, and rotate methods.
         update and set_size can be rewritten
