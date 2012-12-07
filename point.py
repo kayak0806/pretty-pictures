@@ -8,13 +8,12 @@ Creates points that stores
 import pyglet
 
 class Point(object):
-    def __init__(self,x=0,y=0,z=0):
+    def __init__(self,x=0,y=0):
         self.x = x
         self.y = y
-        self.z = z
         
     def __print__(self):
-        return "(%.2d,%.2d,%.2d)"%(self.x,self.y,self.z)
+        return "(%.2d,%.2d,%.2d)"%(self.x,self.y)
         
     def __add__(self,other):
-        return Point(self.x + other.x,self.y + other.y,self.z + other.z)
+        return Point(self.x + other.x,self.y + other.y)
