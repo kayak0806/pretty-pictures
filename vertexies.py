@@ -37,8 +37,8 @@ class Environment(object):
         if self.mode == 'C':
             self.menu_mode.text = 'CIRCLE'
         else:
-            self.menu_mode.text = 'SQUARE'
 
+            self.menu_mode.text = 'SQUARE'
     def draw(self):
         self.batch.draw()
         self.menu_batch.draw()

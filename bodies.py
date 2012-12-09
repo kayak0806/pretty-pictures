@@ -1,5 +1,4 @@
 import pyglet
-from point import Point
 from copy import deepcopy
 import math
 
