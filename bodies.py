@@ -2,6 +2,7 @@ import pyglet
 from copy import deepcopy
 import math
 from numpy import *
+from calculation import *
 
 
 '''Run vertexies.py'''
@@ -51,6 +52,8 @@ class Body(object):
     def update(self,dt): # can rewrite, include first two lines
         self.vert.vertices = self.get_points()
         if self.active:
+            x,y=changeInPosition(self.center,self.velocity)
+            self.shift(x,y) 
             pass
 
     def resize(self,x,y): # rewrite
