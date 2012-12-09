@@ -1,7 +1,8 @@
 import pyglet
-from point import Point
 from copy import deepcopy
 import math
+from numpy import *
+
 
 '''Run vertexies.py'''
 
@@ -13,15 +14,15 @@ class Body(object):
     def __init__(self, environment, x=0, y=0, heading=0, velocity = 0, density=1):
         self.environment = environment
         self.heading = 0
-        self.velocity = velocity
-        self.center = Point(x,y)
+        self.velocity = array([0,0])
+        self.center = array([x,y])
         self.density = density
         self.color = (0,0,255,0,0,255,0,0,255,0,0,255)
         self.active = False
 
     def distance(self, x,y):
-        xcenter = self.center.x
-        ycenter = self.center.y
+        xcenter = self.center[0]
+        ycenter = self.center[1]
         
         return math.sqrt((xcenter - x)**2 + (ycenter-y)**2)
 
@@ -32,11 +33,11 @@ class Body(object):
         return math.atan2(y,x)
 
     def move(self,x,y):
-        self.center = Point(x,y)
+        self.center = array([x,y])
 
     def shift(self,dx,dy):
-        x,y = self.center.x, self.center.y
-        self.center = Point(x+dx,y+dy)
+        x,y = self.center[0], self.center[1]
+        self.center = array([x+dx,y+dy])
 
     def rotate(self, angle):
         self.heading = angle
@@ -87,8 +88,8 @@ class Square(Body):
         else:
             dx = 0
             dy = 0
-        x = self.center.x
-        y = self.center.y
+        x = self.center[0]
+        y = self.center[1]
 
         x1,y1 = x+dx, y+dy
         x2,y2 = x-dy, y+dx
@@ -121,8 +122,8 @@ class Circle(Body):
         points = []
         for i in range(n):
             angle = 2*i*math.pi/n
-            points.append(r*math.cos(angle)+self.center.x)
-            points.append(r*math.sin(angle)+self.center.y)
+            points.append(r*math.cos(angle)+self.center[0])
+            points.append(r*math.sin(angle)+self.center[1])
         points = points[-2:]+points[-2:]+points+points[0:2]+points[0:2]
         for i in range(len(points)):
             points[i] = int(points[i])
