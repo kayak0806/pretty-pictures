@@ -11,7 +11,7 @@ class Environment(object):
         self.menu_batch.add(4, pyglet.gl.GL_QUADS, None, 
             ('v2i', (0,0,width,0,width,30,0,30)),
             ('c3B', (20,40,100)*4))
-        self.menu_active = pyglet.text.Label('RUNNING',
+        self.menu_active = pyglet.text.Label('START',
                           font_name='Times New Roman',
                           font_size=15,
                           batch = self.menu_batch,
@@ -23,13 +23,6 @@ class Environment(object):
                           batch = self.menu_batch,
                           x=200, y=15,
                           anchor_x='left', anchor_y='center')
-        self.instructions = pyglet.text.Label('\'space\' to pause/unpause\t\'C\' for circles\t\'S\' for squares',
-                          font_name='Times New Roman',
-                          font_size=12,
-                          batch = self.menu_batch,
-                          x=15, y=45,
-                          anchor_x='left', anchor_y='center')
-
 
         self.active = True
         self.mode = 'C'     # modes are s -> square, c -> circle
@@ -44,8 +37,8 @@ class Environment(object):
         if self.mode == 'C':
             self.menu_mode.text = 'CIRCLE'
         else:
-
             self.menu_mode.text = 'SQUARE'
+
     def draw(self):
         self.batch.draw()
         self.menu_batch.draw()
