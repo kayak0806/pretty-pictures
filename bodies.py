@@ -59,12 +59,14 @@ class Body(object):
     def get_points(self): # rewrite
         pass
 
+    def is_inside(self,x,y):  # rewrite
+        pass
+
 
 class Square(Body):
     def __init__(self, environment, x,y):
         Body.__init__(self,environment,x,y)
         self.size = 0
-        self.heading = 0
 
         points = self.get_points()
         self.color = (0,0,255)*(len(points)/2)   
@@ -113,7 +115,6 @@ class Circle(Body):
                     ('v2i', points),('c3B', self.color))
 
     def resize(self,x,y):
-        self.vert.vertices = self.get_points()
         self.radius = self.distance(x,y)
         
     def get_points(self):
@@ -129,6 +130,29 @@ class Circle(Body):
             points[i] = int(points[i])
         return points
     
+class Rectangle(Body):
+    def __init__(self, environment, x, y):
+        Body.__init__(self,environment, x=x,y=y)
+        self.width = 0
+        self.height = 0
+
+        points = self.get_points()
+        self.color = (0,0,255)*(len(points)/2)   
+        self.vert = environment.batch.add(4, pyglet.gl.GL_QUADS, None, 
+                    ('v2i', points),('c3B', self.color))
+
+    def resize(self,dx,dy):
+        x = self.x - dx
+        y = self.y - dy
+        self.width = abs(x)
+        self.height = abs(y)
+
+    def get_points(self): # rewrite
+        pass
+
+    def is_inside(self,x,y):  # rewrite
+        pass
+
 
 
 
