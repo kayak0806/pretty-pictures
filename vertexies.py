@@ -6,13 +6,42 @@ window = pyglet.window.Window()
 
 class Environment(object):
     def __init__(self):
+        self.menu_batch = pyglet.graphics.Batch()
+        width = window.width
+        self.menu_batch.add(4, pyglet.gl.GL_QUADS, None, 
+            ('v2i', (0,0,width,0,width,30,0,30)),
+            ('c3B', (20,40,100)*4))
+        self.menu_active = pyglet.text.Label('START',
+                          font_name='Times New Roman',
+                          font_size=15,
+                          batch = self.menu_batch,
+                          x=15, y=15,
+                          anchor_x='left', anchor_y='center')
+        self.menu_mode = pyglet.text.Label('CIRCLE',
+                          font_name='Times New Roman',
+                          font_size=15,
+                          batch = self.menu_batch,
+                          x=200, y=15,
+                          anchor_x='left', anchor_y='center')
+
         self.active = True
-        self.mode = 's'     # modes are s -> square, c -> circle
+        self.mode = 'C'     # modes are s -> square, c -> circle
         self.obj_list = []
         self.batch = pyglet.graphics.Batch()
+
+    def update(self):
+        if self.active:
+            self.menu_active.text = 'RUNNING'
+        else:
+            self.menu_active.text = 'PAUSED'
+        if self.mode == 'C':
+            self.menu_mode.text = 'CIRCLE'
+        else:
+            self.menu_mode.text = 'SQUARE'
+
     def draw(self):
         self.batch.draw()
-        
+        self.menu_batch.draw()
         
 environment = Environment()
 
@@ -25,10 +54,10 @@ def on_draw():
 @window.event
 def on_mouse_press(x, y, button, modifiers):
     ''' Click to make a square'''
-    if button == mouse.LEFT: #blue
+    if environment.mode == 'S': #square
         environment.obj_list.append(Square(environment,x,y))
 
-    if button == mouse.RIGHT: #white
+    if environment.mode == 'C': #circle
         environment.obj_list.append(Circle(environment,x,y))
         
 @window.event
@@ -44,9 +73,14 @@ def on_mouse_release(x, y, button, modifiers):
 @window.event
 def on_key_press(symbol, modifiers):
     if key.symbol_string(symbol) == 'SPACE':
-        environment.active = False
+        environment.active = not environment.active
+    if key.symbol_string(symbol) == 'S':
+        environment.mode = 'S'
+    if key.symbol_string(symbol) == 'C':
+        environment.mode = 'C'
 
 def  update(dt):
+    environment.update()
     if environment.active:
         for obj in environment.obj_list:
             obj.update(dt)

@@ -112,6 +112,7 @@ class Circle(Body):
                     ('v2i', points),('c3B', self.color))
 
     def resize(self,x,y):
+        self.vert.vertices = self.get_points()
         self.radius = self.distance(x,y)
         
     def get_points(self):
