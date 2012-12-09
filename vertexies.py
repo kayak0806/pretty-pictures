@@ -79,7 +79,7 @@ def on_key_press(symbol, modifiers):
     if key.symbol_string(symbol) == 'C':
         environment.mode = 'C'
 
-def  update(dt):
+def update(dt):
     environment.update()
     if environment.active:
         for obj in environment.obj_list:
