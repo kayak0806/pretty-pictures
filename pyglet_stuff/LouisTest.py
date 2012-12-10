@@ -53,6 +53,7 @@ class body(object):
             #print sqrt((self.fixPointX-self.centerMassX)**2+(self.fixPointY-self.centerMassY)**2)
             self.dx=self.dx+self.Tempddx*self.caldt
             self.dy=self.dy+self.Tempddy*self.caldt
+            print self.Tempddy
         elif not self.isFixed:
             self.dy=self.dy+self.gravity*self.caldt+-.1*self.dx*self.caldt
             self.dx=self.dx+-.1*self.dx*self.caldt
@@ -94,12 +95,12 @@ class body(object):
         self.fixPointX=float(x)
         self.fixPointY=float(y)
         self.fixLength=sqrt((self.fixPointX-self.centerMassX)**2+(self.fixPointY-self.centerMassY)**2)
-        #self.dx=0
-        #self.dy=0
-        vectorTan=array([-(self.fixPointY-self.centerMassY),self.fixPointX-self.centerMassX])
-        vectorTan=vectorTan/linalg.norm(vectorTan)
-        self.dx=self.dx*dot(self.vectorHor,vectorTan)
-        self.dy=self.dy*dot(self.vectorVer,vectorTan)
+        self.dx=0
+        self.dy=0
+        #vectorTan=array([-(self.fixPointY-self.centerMassY),self.fixPointX-self.centerMassX])
+        #vectorTan=vectorTan/linalg.norm(vectorTan)
+        #self.dx=self.dx*dot(self.vectorHor,vectorTan)
+        #self.dy=self.dy*dot(self.vectorVer,vectorTan)
         
     def isFixedTo(self):
         if self.fixPointX!=None:
@@ -134,7 +135,7 @@ def update(dt):
         obj.update(dt)
 #    print sqrt((body2.fixPointX-body2.centerMassX)**2+(body2.fixPointY-body2.centerMassY)**2)
 
-dt = 1/360.
+dt = 1/10.
 pyglet.clock.schedule_interval(update, dt) # Schedules updates for all objects every 60th of a second (Float)
 
 x=200

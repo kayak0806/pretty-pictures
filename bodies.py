@@ -15,7 +15,7 @@ class Body(object):
     def __init__(self, environment, x=0, y=0, heading=0, velocity = 0, density=1):
         self.environment = environment
         self.heading = 0
-        self.velocity = array([0,0])
+        self.velocity = array([0.,0.])
         self.center = array([x,y])
         self.density = density
         self.color = (0,0,255,0,0,255,0,0,255,0,0,255)
@@ -28,8 +28,8 @@ class Body(object):
         return math.sqrt((xcenter - x)**2 + (ycenter-y)**2)
 
     def angle(self, dx, dy):
-        x = float(dx - self.center.x)
-        y = float(dy - self.center.y)
+        x = float(dx - self.center[0])
+        y = float(dy - self.center[1])
 
         return math.atan2(y,x)
 
@@ -37,8 +37,8 @@ class Body(object):
         self.center = array([x,y])
 
     def shift(self,dx,dy):
-        x,y = self.center[0], self.center[1]
-        self.center = array([x+dx,y+dy])
+        self.center = array([self.center[0]+dx*1/20.,self.center[1]+dy*1/20.])
+        #print self.center
 
     def rotate(self, angle):
         self.heading = angle
@@ -52,8 +52,15 @@ class Body(object):
     def update(self,dt): # can rewrite, include first two lines
         self.vert.vertices = self.get_points()
         if self.active:
-            x,y=changeInPosition(self.center,self.velocity)
-            self.shift(x,y) 
+            Tempddx,Tempddy=gravity(self.center,self.velocity)
+            ddx=Tempddx
+            ddy=Tempddy
+            Tempddx,Tempddy=Centrp(self.center,self.velocity,math.sqrt((400-self.center[0])**2+(600-self.center[1])**2),(400,600))
+            ddx=ddx+Tempddx
+            ddy=ddy+Tempddy
+            self.velocity[0]=self.velocity[0]+ddx*1/20.
+            self.velocity[1]=self.velocity[1]+ddy*1/20.
+            self.shift(self.velocity[0],self.velocity[1]) 
             pass
 
     def resize(self,x,y): # rewrite
