@@ -133,25 +133,42 @@ class Circle(Body):
             points[i] = int(points[i])
         return points
     
-class Rectangle(Body):
+class Rod(Body):
     def __init__(self, environment, x, y):
         Body.__init__(self,environment, x=x,y=y)
-        self.width = 0
-        self.height = 0
+        self.width = 50
+        self.length = 0
 
         points = self.get_points()
         self.color = (0,0,255)*(len(points)/2)   
         self.vert = environment.batch.add(4, pyglet.gl.GL_QUADS, None, 
                     ('v2i', points),('c3B', self.color))
 
-    def resize(self,dx,dy):
-        x = self.x - dx
-        y = self.y - dy
-        self.width = abs(x)
-        self.height = abs(y)
+    def resize(self,x,y):
+        r = self.distance(x,y)
+        self.length = math.sqrt(r**2 - (self.width/2)**2)
 
-    def get_points(self): # rewrite
-        pass
+    def get_points(self):
+        if self.size>0:
+            dx = math.cos(self.heading)*(self.size/math.sqrt(2))
+            dy = math.sin(self.heading)*(self.size/math.sqrt(2)) #0.785389
+        else:
+            dx = 0
+            dy = 0
+        x = self.center[0]
+        y = self.center[1]
+
+        x1,y1 = x+dx, y+dy
+        x2,y2 = x-dy, y+dx
+        x3,y3 = x-dx, y-dy
+        x4,y4 = x+dy, y-dx
+
+        points = [x1,y1,x2,y2,x3,y3,x4,y4]
+        
+        for i in range(len(points)):
+            points[i] = int(points[i])
+        return points
+        
 
     def is_inside(self,x,y):  # rewrite
         pass
