@@ -7,9 +7,9 @@ from calculation import *
 '''Run vertexies.py'''
 
 class Body(object):
-    ''' includes move, shift, and rotate methods.
-        update and set_size can be rewritten
-        resize and get_points need to be overwritten'''
+    ''' includes move, shift, rotate, and update methods.
+        set_size can be rewritten
+        resize, get_points, and is_inside need to be overwritten'''
 
     def __init__(self, environment, x=0, y=0, heading=0, velocity = 0, density=1):
         self.environment = environment
@@ -37,7 +37,6 @@ class Body(object):
 
     def shift(self,dx,dy):
         self.center = array([self.center[0]+dx*1/20.,self.center[1]+dy*1/20.])
-        #print self.center
 
     def rotate(self, angle):
         self.heading = angle
@@ -45,10 +44,7 @@ class Body(object):
     def twist(self, dangle):
         self.heading += dangle
 
-    def set_size(self, x, y): # can rewrite
-        self.resize(x,y)
-
-    def update(self,dt): # can rewrite, include first two lines
+    def update(self,dt): 
         self.vert.vertices = self.get_points()
         if self.active:
             Tempddx,Tempddy=gravity(self.center,self.velocity)
@@ -60,7 +56,11 @@ class Body(object):
             self.velocity[0]=self.velocity[0]+ddx*1/20.
             self.velocity[1]=self.velocity[1]+ddy*1/20.
             self.shift(self.velocity[0],self.velocity[1]) 
-            pass
+
+    def set_size(self, x, y): # can rewrite
+        self.resize(x,y)
+        self.vert.vertices = self.get_points()
+
 
     def resize(self,x,y): # rewrite
         pass
@@ -95,7 +95,7 @@ class Square(Body):
     def get_points(self):
         if self.size>0:
             dx = math.cos(self.heading)*(self.size/math.sqrt(2))
-            dy = math.sin(self.heading)*(self.size/math.sqrt(2)) #0.785389
+            dy = math.sin(self.heading)*(self.size/math.sqrt(2))
         else:
             dx = 0
             dy = 0
@@ -113,11 +113,19 @@ class Square(Body):
             points[i] = int(points[i])
         return points
 
+    def is_inside(self,x,y):
+        phi = self.angle(x,y)
+        r = self.distance(x,y)
+        dx = r*math.cos(phi-self.heading+math.pi/4)+self.center[0]
+        dy = r*math.sin(phi-self.heading+math.pi/4)+self.center[1]
+        xdist = abs(self.center[0]-dx)
+        ydist = abs(self.center[1]-dy)
+        return xdist <= self.size/2 and ydist <= self.size/2
+
 class Circle(Body):
     def __init__(self, environment, x, y):
         Body.__init__(self,environment, x=x,y=y)
-        self.radius = 0
-        
+        self.radius = 0        
         points = self.get_points()
         self.color = (0,0,255)*(len(points)/2)
         self.vert = environment.batch.add(34, pyglet.gl.GL_TRIANGLE_STRIP, None, 
@@ -138,6 +146,9 @@ class Circle(Body):
         for i in range(len(points)):
             points[i] = int(points[i])
         return points
+
+    def is_inside(self,x,y):
+        return self.distance(x,y) <= self.radius
     
 class Rod(Body):
     def __init__(self, environment, x, y):
@@ -157,6 +168,7 @@ class Rod(Body):
             phi = math.atan(self.width/(2*self.length))
         angle = self.angle(x,y)-phi
         self.rotate(angle)
+        self.vert.vertices = self.get_points()
         
 
     def resize(self,x,y):
@@ -189,8 +201,8 @@ class Rod(Body):
         return points
         
 
-    def is_inside(self,x,y):  # rewrite
-        pass
+    def is_inside(self,x,y):
+        return 'rod'
 
 
 
