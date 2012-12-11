@@ -1,6 +1,6 @@
 import pyglet
 from pyglet.window import mouse, key
-from bodies import Square, Circle
+from bodies import Square, Circle, Rod
 
 window = pyglet.window.Window(width=800,height=600)
 
@@ -36,8 +36,10 @@ class Environment(object):
             self.menu_active.text = 'PAUSED'
         if self.mode == 'C':
             self.menu_mode.text = 'CIRCLE'
-        else:
+        elif self.mode == 'S':
             self.menu_mode.text = 'SQUARE'
+        else:
+            self.menu_mode.text = 'ROD'
 
     def draw(self):
         self.batch.draw()
@@ -54,11 +56,14 @@ def on_draw():
 @window.event
 def on_mouse_press(x, y, button, modifiers):
     ''' Click to make a square'''
-    if environment.mode == 'S': #square
+    mode = environment.mode
+    if mode == 'S': #square
         environment.obj_list.append(Square(environment,x,y))
 
-    if environment.mode == 'C': #circle
+    if mode == 'C': #circle
         environment.obj_list.append(Circle(environment,x,y))
+    if mode == 'R': #rod
+        environment.obj_list.append(Rod(environment,x,y))
         
 @window.event
 def on_mouse_drag(x, y, dx,dy,button, modifiers):
@@ -78,6 +83,8 @@ def on_key_press(symbol, modifiers):
         environment.mode = 'S'
     if key.symbol_string(symbol) == 'C':
         environment.mode = 'C'
+    if key.symbol_string(symbol) == 'R':
+        environment.mode = 'R'
 
 def update(dt):
     environment.update()

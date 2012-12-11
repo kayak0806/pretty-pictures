@@ -1,5 +1,4 @@
 import pyglet
-from copy import deepcopy
 import math
 from numpy import *
 from calculation import *
@@ -150,25 +149,38 @@ class Rod(Body):
         self.color = (0,0,255)*(len(points)/2)   
         self.vert = environment.batch.add(4, pyglet.gl.GL_QUADS, None, 
                     ('v2i', points),('c3B', self.color))
+    
+    def set_size(self,x,y):
+        self.resize(x,y)
+        phi = math.pi/2    
+        if self.length>0:
+            phi = math.atan(self.width/(2*self.length))
+        angle = self.angle(x,y)-phi
+        self.rotate(angle)
+        
 
     def resize(self,x,y):
         r = self.distance(x,y)
+        if r < self.width/2:
+            r = self.width/2
         self.length = math.sqrt(r**2 - (self.width/2)**2)
 
     def get_points(self):
-        if self.size>0:
-            dx = math.cos(self.heading)*(self.size/math.sqrt(2))
-            dy = math.sin(self.heading)*(self.size/math.sqrt(2)) #0.785389
-        else:
-            dx = 0
-            dy = 0
+        dx = 0
+        dy = 0
+        if self.length>0:
+            dx = self.length*math.cos(self.heading)
+            dy = self.length*math.sin(self.heading)
         x = self.center[0]
         y = self.center[1]
 
-        x1,y1 = x+dx, y+dy
-        x2,y2 = x-dy, y+dx
-        x3,y3 = x-dx, y-dy
-        x4,y4 = x+dy, y-dx
+        h = self.width/2 * math.sin(self.heading)
+        v = self.width/2 * math.cos(self.heading)
+
+        x1,y1 = x+dx-h, y+dy+v
+        x2,y2 = x-dx-h, y-dy+v
+        x3,y3 = x-dx+h, y-dy-v
+        x4,y4 = x+dx+h, y+dy-v
 
         points = [x1,y1,x2,y2,x3,y3,x4,y4]
         
