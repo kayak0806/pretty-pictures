@@ -2,7 +2,7 @@ import pyglet
 from pyglet.window import mouse, key
 from bodies import Square, Circle
 
-window = pyglet.window.Window()
+window = pyglet.window.Window(width=800,height=600)
 
 class Environment(object):
     def __init__(self):
@@ -85,7 +85,7 @@ def update(dt):
         for obj in environment.obj_list:
             obj.update(dt)
 
-dt = 1/30.
+dt = 1/360.
 pyglet.clock.schedule_interval(update, dt) # Schedules updates for all objects every 30th of a second (Float)
 
 
