@@ -202,7 +202,13 @@ class Rod(Body):
         
 
     def is_inside(self,x,y):
-        return 'rod'
+        phi = self.angle(x,y)
+        r = self.distance(x,y)
+        dx = r*math.cos(phi-self.heading)+self.center[0]
+        dy = r*math.sin(phi-self.heading)+self.center[1]
+        xdist = abs(self.center[0]-dx)
+        ydist = abs(self.center[1]-dy)
+        return xdist <= self.length and ydist <= self.width/2
 
 
 
