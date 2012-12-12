@@ -55,7 +55,7 @@ class Body(object):
             Tempddx,Tempddy=gravity(self.center,self.velocity)
             ddx=Tempddx
             ddy=Tempddy
-            Tempddx,Tempddy=Centrp(self.center,self.velocity,math.sqrt((400-self.center[0])**2+(600-self.center[1])**2),(400,600))
+            Tempddx,Tempddy=Centrp(self.center,self.velocity,math.sqrt((400-self.center[0])**2+(300-self.center[1])**2),(400,300))
             ddx=ddx+Tempddx
             ddy=ddy+Tempddy
             self.velocity[0]=self.velocity[0]+ddx*1/20.

@@ -85,7 +85,7 @@ def update(dt):
         for obj in environment.obj_list:
             obj.update(dt)
 
-dt = 1/360.
+dt = 1/60.
 pyglet.clock.schedule_interval(update, dt) # Schedules updates for all objects every 30th of a second (Float)
 
 
