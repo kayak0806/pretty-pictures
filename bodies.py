@@ -13,14 +13,15 @@ class Body(object):
 
     def __init__(self, environment, x=0, y=0, heading=0, velocity = 0, density=1):
         self.environment = environment
-        self.dt=1/20.
+        self.dt=1/60.
         self.heading = 0
         self.velocity = array([0.,0.])
         self.center = array([x,y])
         self.density = density
         self.color = (0,0,255,0,0,255,0,0,255,0,0,255)
         self.active = False
-        self.mates = [] # list of connected bodies
+        self.bodyConstraints = [] # list of connected bodies
+        self.freeConstraints = []
 
     def distance(self, x,y):
         xcenter = self.center[0]
@@ -46,18 +47,24 @@ class Body(object):
     def twist(self, dangle):
         self.heading += dangle
 
+    def joinToObject(self,body=None,fixPoint=(0,0),fixVelocity=(0,0)):
+        if body!=None:
+            fixDistance = math.sqrt((body.center[0]-self.center[0])**2+(body.center[1]-self.center[1])**2)
+            self.bodyConstraints.append((body,fixDistance))
+        else:
+            fixDistance = math.sqrt((fixPoint[0]-self.center[0])**2+(fixPoint[1]-self.center[1])**2)
+            self.freeConstraints.append((fixPoint,fixVelocity,fixDistance))
+
     def update(self,dt): 
         self.vert.vertices = self.get_points()
         if self.active:
-            Tempddx,Tempddy=gravity(self.center,self.velocity)
-            ddx=Tempddx
-            ddy=Tempddy
-            Tempddx,Tempddy=Centrp(self.center,self.velocity,math.sqrt((400-self.center[0])**2+(600-self.center[1])**2),(400,600))
-            ddx=ddx+Tempddx
-            ddy=ddy+Tempddy
-            self.velocity[0]=self.velocity[0]+ddx*self.dt
-            self.velocity[1]=self.velocity[1]+ddy*self.dt
-            self.shift(self.velocity[0],self.velocity[1]) 
+            self.velocity[1]=self.velocity[1]-9.81
+            for body in self.freeConstraints:
+                self.velocity[0],self.velocity[1]=joinedBodies(self.center,self.velocity,body[0],body[1],body[2])
+            for body in self.bodyConstraints:
+                self.velocity[0],self.velocity[1]=joinedBodies(self.center,self.velocity,body[0].center,body[0].velocity,body[1])
+        self.shift(self.velocity[0],self.velocity[1])
+            
 
     def set_size(self, x, y): # can rewrite
         self.resize(x,y)

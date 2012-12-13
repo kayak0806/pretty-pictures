@@ -81,6 +81,7 @@ def on_mouse_drag(x, y, dx,dy,button, modifiers):
     if environment.mode in ['S','C','R']:
         environment.obj_list[-1].set_size(x,y)
 
+
 @window.event
 def on_mouse_release(x, y, button, modifiers):
     '''activate the bodies once made'''
@@ -101,7 +102,15 @@ def update(dt):
         for obj in environment.obj_list:
             obj.update(dt)
 
-dt = 1/360.
+environment.obj_list.append(Circle(environment,200,400))
+environment.obj_list[-1].set_size(205,405)
+environment.obj_list[-1].joinToObject(fixPoint=(300,600),fixVelocity=(0,0))
+environment.obj_list.append(Circle(environment,200,450))
+environment.obj_list[-1].set_size(205,455)
+environment.obj_list[-2].joinToObject(body=environment.obj_list[-1])
+
+dt = 1/60.
+
 pyglet.clock.schedule_interval(update, dt) # Schedules updates for all objects every 30th of a second (Float)
 
 

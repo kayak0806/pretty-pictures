@@ -1,16 +1,14 @@
 from numpy import *
 
-def gravity(center,velocity):
-    return (0,-98.1)
-
-def Centrp(center,velocity,fixLength,fixCenter):
+def joinedBodies(selfCenter, selfVelocity, otherCenter, otherVelocity, fixedDistance=0):
     vectorHor=array([1,0])
     vectorVer=array([0,1])
-    vectorTan=array([-(fixCenter[1]-center[1]),fixCenter[0]-center[0]])
-    vectorNor=array([fixCenter[0]-center[0],fixCenter[1]-center[1]])
+    vectorTan=array([-(otherCenter[1]-selfCenter[1]),otherCenter[0]-selfCenter[0]])
+    vectorNor=array([otherCenter[0]-selfCenter[0],otherCenter[1]-selfCenter[1]])
     vectorTan=vectorTan/linalg.norm(vectorTan)
     vectorNor=vectorNor/linalg.norm(vectorNor)
-    CentrpAccel=(velocity[0]**2+velocity[1]**2)/fixLength
-    ddx=CentrpAccel*dot(vectorHor,vectorNor)+98.1*dot(vectorVer,vectorNor)*dot(vectorHor,vectorNor)
-    ddy=CentrpAccel*dot(vectorVer,vectorNor)+98.1*dot(vectorVer,vectorNor)*dot(vectorVer,vectorNor)
-    return (ddx,ddy)
+    tempDis=math.sqrt((otherCenter[0]-selfCenter[0])**2+(otherCenter[1]-selfCenter[1])**2)
+    disError=fixedDistance-tempDis
+    dx=selfVelocity[0]-dot(selfVelocity,vectorNor)*dot(vectorHor,vectorNor)+dot(otherVelocity,vectorNor)*dot(vectorHor,vectorNor)-10*disError*dot(vectorHor,vectorNor)
+    dy=selfVelocity[1]-dot(selfVelocity,vectorNor)*dot(vectorVer,vectorNor)+dot(otherVelocity,vectorNor)*dot(vectorVer,vectorNor)-10*disError*dot(vectorVer,vectorNor)
+    return (dx,dy)
