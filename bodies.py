@@ -22,19 +22,17 @@ class Body(object):
         self.active = False
         self.bodyConstraints = [] # list of connected bodies
         self.freeConstraints = []
-        self.anchors = [array([0,0])] # polar coords
-        self.track_points = self.get_tracked()
-        self.track_vert = environment.track_batch.add(len(self.track_points)/2,
-                    pyglet.gl.GL_POINTS, None, ('v2f', self.track_points))
+        self.track_vert = None 
     
     def track(self):
-        self.track_points += self.get_tracked()
-        if len(self.track_points)>=200*2:
-            for i in range(len(self.anchors)):
-                self.track_points.pop(0)
-                self.track_points.pop(0)
-        self.track_vert.resize(len(self.track_points)/2)
-        self.track_vert.vertices = self.track_points
+        if self.track_vert:
+            self.track_points += self.get_tracked()
+            if len(self.track_points)>=200*2:
+                for i in range(len(self.anchors)):
+                    self.track_points.pop(0)
+                    self.track_points.pop(0)
+            self.track_vert.resize(len(self.track_points)/2)
+            self.track_vert.vertices = self.track_points
     
     def get_tracked(self):
         points = []
@@ -47,7 +45,13 @@ class Body(object):
     def add_anchor(self, x,y):
         angle = self.angle(x,y)
         r = self.distance(x,y)
-        self.anchors.append(array([r,angle]))
+        if not self.track_vert:
+            self.anchors = [array([r,angle])] # polar coords
+            self.track_points = self.get_tracked()
+            self.track_vert = self.environment.track_batch.add(len(self.track_points)/2,
+                    pyglet.gl.GL_POINTS, None, ('v2f', self.track_points))
+        else:
+            self.anchors.append(array([r,angle]))
 
     def distance(self, x,y):
         xcenter = self.center[0]
@@ -84,6 +88,7 @@ class Body(object):
     def update(self,dt): 
         self.vert.vertices = self.get_points()
         if self.active:
+            self.track()
             for body in self.freeConstraints:
                 self.velocity[0],self.velocity[1]=joinedBodies(selfCenter=self.center,selfVelocity=self.velocity,otherCenter=body[0],otherVelocity=body[1],fixedDistance=body[2])
             for body in self.bodyConstraints:

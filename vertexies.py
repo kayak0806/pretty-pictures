@@ -34,6 +34,7 @@ class Environment(object):
         self.mode = 'T'     # modes are s -> square, c -> circle, R -> rod, T -> select
         self.obj_list = []
         self.batch = pyglet.graphics.Batch()
+        self.track_batch = pyglet.graphics.Batch()
 
     def update(self):
         if self.active:
@@ -52,6 +53,7 @@ class Environment(object):
     def draw(self):
         self.batch.draw()
         self.menu_batch.draw()
+        self.track_batch.draw()
         
 environment = Environment()
 
