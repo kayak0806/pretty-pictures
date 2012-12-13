@@ -36,6 +36,7 @@ class Environment(object):
         self.mode = 'T'     # modes are s -> square, c -> circle, R -> rod, T -> select
         self.obj_list = []
         self.batch = pyglet.graphics.Batch()
+        self.track_batch = pyglet.graphics.Batch()
 
     def update(self):
         if self.active:
@@ -54,9 +55,10 @@ class Environment(object):
     def draw(self):
         self.batch.draw()
         self.menu_batch.draw()
+        self.track_batch.draw()
         
 environment = Environment()
-
+Constraints=[]
 
 @window.event
 def on_draw():
@@ -67,16 +69,22 @@ def on_draw():
 def on_mouse_press(x, y, button, modifiers):
     ''' Click to make a shape'''
     mode = environment.mode
-    if mode == 'S': #square
-        environment.obj_list.append(Square(environment,x,y))
-    if mode == 'C': #circle
-        environment.obj_list.append(Circle(environment,x,y))
-    if mode == 'R': #rod
-        environment.obj_list.append(Rod(environment,x,y))
     if mode == 'T': #select
         for obj in environment.obj_list:
-            print obj.is_inside(x,y)
-        
+            if obj.is_inside(x,y):
+                obj.add_anchor(x,y)
+    else:
+        if mode == 'S': #square
+            environment.obj_list.append(Square(environment,x,y))
+        if mode == 'C': #circle
+            environment.obj_list.append(Circle(environment,x,y))
+        if mode == 'R': #rod
+            environment.obj_list.append(Rod(environment,x,y))
+        if len(environment.obj_list)==1:
+            Constraints.append(constraints(body1=environment.obj_list[-1],center=(400,600)))
+        else:
+            Constraints.append(constraints(body1=environment.obj_list[-1],body2=environment.obj_list[-2]))
+
 @window.event
 def on_mouse_drag(x, y, dx,dy,button, modifiers):
     ''' Drag to set the size of the shape'''
@@ -98,7 +106,7 @@ def on_key_press(symbol, modifiers):
     else:
         environment.mode = key.symbol_string(symbol)
 
-Constraints=[]
+
 
 def update(dt):
     environment.update()
@@ -112,14 +120,14 @@ def update(dt):
         for obj in environment.obj_list:
             obj.update(dt)
             totEnergy+=.5*(linalg.norm(obj.velocity)*dt)**2+obj.center[1]*9.81
-        print totEnergy
-
+'''
 environment.obj_list.append(Circle(environment,200,500))
 environment.obj_list[-1].set_size(205,505)
 Constraints.append(constraints(body1=environment.obj_list[-1],center=(400,600)))
 environment.obj_list.append(Circle(environment,250,500))
 environment.obj_list[-1].set_size(255,505)
 Constraints.append(constraints(body1=environment.obj_list[-1],body2=environment.obj_list[-2]))
+'''
 dt = 1/60.
 
 pyglet.clock.schedule_interval(update, dt) # Schedules updates for all objects every 30th of a second (Float)
