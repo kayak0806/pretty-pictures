@@ -7,7 +7,7 @@ from calculation import *
 '''Run vertexies.py'''
 
 class Body(object):
-    ''' includes move, shift, rotate, and update methods.
+    ''' includes track, distance, angle, move, shift, rotate, and update methods.
         set_size can be rewritten
         resize, get_points, and is_inside need to be overwritten'''
 
@@ -18,9 +18,36 @@ class Body(object):
         self.velocity = array([0.,0.])
         self.center = array([x,y])
         self.density = density
-        self.color = (0,0,255,0,0,255,0,0,255,0,0,255)
+        self.color = (0,0,255)
         self.active = False
-        self.mates = [] # list of connected bodies
+        self.tracked = [array([50,50]), array([-50,-50])] # tracked point
+        self.points = self.get_tracker()
+        self.allPoints = [0,0]
+        self.points_vert = environment.track_batch.add(1,pyglet.gl.GL_POINTS, None, 
+                    ('v2f', self.allPoints))
+    
+    def track(self):
+        new = self.get_tracker()
+        print type(new)
+        for i in new:
+            points[i] = self.points[i] + new[i]
+            length = len(self.points[i])
+            if length >= 500*2:
+                self.points[i].pop(0)
+                self.points[i].pop(0)
+            allPoints += self.points[i]
+        allength = len(self.allpoints)
+        self.points_vert.resize(allength/2)
+        self.points_vert.vertices = self.allpoints
+
+    def get_tracker(self):
+        points = []
+        for point in self.tracked:
+            newx = int(self.center[0]) + int(point[0])
+            newy = int(self.center[1]) + int(point[1])
+            points.append([newx, newy])
+        print type(points)
+        return points
 
     def distance(self, x,y):
         xcenter = self.center[0]
@@ -49,6 +76,7 @@ class Body(object):
     def update(self,dt): 
         self.vert.vertices = self.get_points()
         if self.active:
+            self.track()
             Tempddx,Tempddy=gravity(self.center,self.velocity)
             ddx=Tempddx
             ddy=Tempddy
@@ -155,7 +183,7 @@ class Circle(Body):
 class Rod(Body):
     def __init__(self, environment, x, y):
         Body.__init__(self,environment, x=x,y=y)
-        self.width = 50
+        self.width = 30
         self.length = 0
 
         points = self.get_points()
@@ -211,7 +239,4 @@ class Rod(Body):
         xdist = abs(self.center[0]-dx)
         ydist = abs(self.center[1]-dy)
         return xdist <= self.length and ydist <= self.width/2
-
-
-
 

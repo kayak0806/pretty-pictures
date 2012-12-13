@@ -25,9 +25,10 @@ class Environment(object):
                           anchor_x='left', anchor_y='center')
 
         self.active = True
-        self.mode = 'T'     # modes are s -> square, c -> circle, R -> rod, T -> select
+        self.mode = 'C'     # modes are s -> square, c -> circle, R -> rod, T -> select
         self.obj_list = []
         self.batch = pyglet.graphics.Batch()
+        self.track_batch = pyglet.graphics.Batch()
 
     def update(self):
         if self.active:
@@ -46,6 +47,7 @@ class Environment(object):
     def draw(self):
         self.batch.draw()
         self.menu_batch.draw()
+        self.track_batch.draw()
         
 environment = Environment()
 
@@ -61,6 +63,7 @@ def on_mouse_press(x, y, button, modifiers):
     mode = environment.mode
     if mode == 'S': #square
         environment.obj_list.append(Square(environment,x,y))
+
     if mode == 'C': #circle
         environment.obj_list.append(Circle(environment,x,y))
     if mode == 'R': #rod
