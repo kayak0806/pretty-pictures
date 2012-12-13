@@ -7,7 +7,8 @@ from calculation import *
 '''Run vertexies.py'''
 
 class Body(object):
-    ''' includes move, shift, rotate, and update methods.
+    ''' Basic body to be used in shape classes
+        includes move, shift, rotate, twist, and update methods.
         set_size can be rewritten
         resize, get_points, and is_inside need to be overwritten'''
 
@@ -27,7 +28,7 @@ class Body(object):
     def track(self):
         if self.track_vert:
             self.track_points += self.get_tracked()
-            if len(self.track_points)>=400*2:
+            if len(self.track_points)>=400*2: 
                 for i in range(len(self.anchors)):
                     self.track_points.pop(0)
                     self.track_points.pop(0)
@@ -56,13 +57,11 @@ class Body(object):
     def distance(self, x,y):
         xcenter = self.center[0]
         ycenter = self.center[1]
-        
         return math.sqrt((xcenter - x)**2 + (ycenter-y)**2)
 
     def angle(self, dx, dy):
         x = float(dx - self.center[0])
         y = float(dy - self.center[1])
-
         return math.atan2(y,x)
 
     def move(self,x,y):
@@ -97,18 +96,17 @@ class Body(object):
         self.shift(self.velocity[0],self.velocity[1])
             
 
-    def set_size(self, x, y): # can rewrite
-        self.resize(x,y)
+    def set_size(self, x, y): # can rewrite, always include first line
         self.vert.vertices = self.get_points()
+        self.resize(x,y)
 
-
-    def resize(self,x,y): # rewrite
+    def resize(self,x,y): # must rewrite
         pass
 
-    def get_points(self): # rewrite
+    def get_points(self): # must rewrite
         pass
 
-    def is_inside(self,x,y):  # rewrite
+    def is_inside(self,x,y):  # must rewrite
         pass
 
 
@@ -193,7 +191,7 @@ class Circle(Body):
 class Rod(Body):
     def __init__(self, environment, x, y):
         Body.__init__(self,environment, x=x,y=y)
-        self.width = 50
+        self.width = 30
         self.length = 0
 
         points = self.get_points()
