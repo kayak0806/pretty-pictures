@@ -23,6 +23,12 @@ class Environment(object):
                           batch = self.menu_batch,
                           x=200, y=15,
                           anchor_x='left', anchor_y='center')
+        self.instructions = pyglet.text.Label('\'space\' to pause/unpause \t\t \'T\' to select \t\t \'C\' for circles \t \'S\' for squares',
+                          font_name='Times New Roman',
+                          font_size=12,
+                          batch = self.menu_batch,
+                          x=width - 15, y=15,
+                          anchor_x='right', anchor_y='center')
 
         self.active = True
         self.mode = 'C'     # modes are s -> square, c -> circle, R -> rod, T -> select
