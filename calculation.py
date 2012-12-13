@@ -14,7 +14,6 @@ def joinedBodies(selfCenter=0,selfVelocity=0,otherBody=0,otherCenter=0,otherVelo
         dy=selfVelocity[1]-dot(selfVelocity,vectorNor)*dot(vectorVer,vectorNor)+dot(otherBody.velocity,vectorNor)*dot(vectorVer,vectorNor)-10*disError*dot(vectorVer,vectorNor)
         otherBody.velocity[0]=otherBody.velocity[0]-dot(selfVelocity,vectorNor)*dot(vectorHor,vectorNor)
         otherBody.velocity[1]=otherBody.velocity[1]-dot(selfVelocity,vectorNor)*dot(vectorVer,vectorNor)
-        print dot(selfVelocity,vectorNor)*dot(vectorVer,vectorNor)
         return (dx,dy)
     else:   
         vectorHor=array([1,0])
