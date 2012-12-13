@@ -20,27 +20,33 @@ class Body(object):
         self.density = density
         self.color = (0,0,255)
         self.active = False
-        self.anchors = [array([50,50]), array([-50,-50])] # tracked point
-        self.points = self.get_tracked()
-        self.points_vert = environment.track_batch.add(len(self.points)/2,
-                    pyglet.gl.GL_POINTS, None, ('v2f', self.points))
+        self.anchors = [array([50,0]), array([50,math.pi/2])] # polar coords
+        self.add_anchor(100,100)
+        self.track_points = self.get_tracked()
+        self.track_vert = environment.track_batch.add(len(self.track_points)/2,
+                    pyglet.gl.GL_POINTS, None, ('v2f', self.track_points))
     
     def track(self):
-        self.points += self.get_tracked()
-        if len(self.points)>=100*2:
+        self.track_points += self.get_tracked()
+        if len(self.track_points)>=100*2:
             for i in range(len(self.anchors)):
-                self.points.pop(0)
-                self.points.pop(0)
-        self.points_vert.resize(len(self.points)/2)
-        self.points_vert.vertices = self.points
+                self.track_points.pop(0)
+                self.track_points.pop(0)
+        self.track_vert.resize(len(self.track_points)/2)
+        self.track_vert.vertices = self.track_points
     
     def get_tracked(self):
         points = []
         for point in self.anchors:
-            newx = int(self.center[0]) + int(point[0])
-            newy = int(self.center[1]) + int(point[1])
+            newx = int(self.center[0]) + int(point[0]*math.cos(point[1]))
+            newy = int(self.center[1]) + int(point[0]*math.sin(point[1]))
             points += [newx, newy]
         return points
+
+    def add_anchor(self, x,y):
+        angle = self.angle(x,y)
+        r = self.distance(x,y)
+        self.anchors.append(array([r,angle]))
 
     def distance(self, x,y):
         xcenter = self.center[0]
