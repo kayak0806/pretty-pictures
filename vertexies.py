@@ -25,7 +25,7 @@ class Environment(object):
                           anchor_x='left', anchor_y='center')
 
         self.active = True
-        self.mode = 'C'     # modes are s -> square, c -> circle
+        self.mode = 'T'     # modes are s -> square, c -> circle, R -> rod, T -> select
         self.obj_list = []
         self.batch = pyglet.graphics.Batch()
 
@@ -38,8 +38,10 @@ class Environment(object):
             self.menu_mode.text = 'CIRCLE'
         elif self.mode == 'S':
             self.menu_mode.text = 'SQUARE'
-        else:
+        elif self.mode == 'R':
             self.menu_mode.text = 'ROD'
+        else:
+            self.menu_mode.text = 'select'
 
     def draw(self):
         self.batch.draw()
@@ -55,36 +57,37 @@ def on_draw():
 
 @window.event
 def on_mouse_press(x, y, button, modifiers):
-    ''' Click to make a square'''
+    ''' Click to make a shape'''
     mode = environment.mode
     if mode == 'S': #square
         environment.obj_list.append(Square(environment,x,y))
-
     if mode == 'C': #circle
         environment.obj_list.append(Circle(environment,x,y))
     if mode == 'R': #rod
         environment.obj_list.append(Rod(environment,x,y))
+    if mode == 'T': #select
+        for obj in environment.obj_list:
+            print obj.is_inside(x,y)
         
 @window.event
 def on_mouse_drag(x, y, dx,dy,button, modifiers):
-    ''' Drag to set the size of the body'''
-    environment.obj_list[-1].set_size(x,y)
+    ''' Drag to set the size of the shape'''
+    if environment.mode in ['S','C','R']:
+        environment.obj_list[-1].set_size(x,y)
 
 @window.event
 def on_mouse_release(x, y, button, modifiers):
+    '''activate the bodies once made'''
     for s in environment.obj_list:
         s.active = True
 
 @window.event
 def on_key_press(symbol, modifiers):
+    ''' change the drawing mode or pause the system'''
     if key.symbol_string(symbol) == 'SPACE':
         environment.active = not environment.active
-    if key.symbol_string(symbol) == 'S':
-        environment.mode = 'S'
-    if key.symbol_string(symbol) == 'C':
-        environment.mode = 'C'
-    if key.symbol_string(symbol) == 'R':
-        environment.mode = 'R'
+    else:
+        environment.mode = key.symbol_string(symbol)
 
 def update(dt):
     environment.update()
