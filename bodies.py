@@ -20,33 +20,26 @@ class Body(object):
         self.density = density
         self.color = (0,0,255)
         self.active = False
-        self.tracked = [array([50,50]), array([-50,-50])] # tracked point
-        self.points = self.get_tracker()
-        self.allPoints = [0,0]
-        self.points_vert = environment.track_batch.add(1,pyglet.gl.GL_POINTS, None, 
-                    ('v2f', self.allPoints))
+        self.anchors = [array([50,50]), array([-50,-50])] # tracked point
+        self.points = self.get_tracked()
+        self.points_vert = environment.track_batch.add(len(self.points)/2,
+                    pyglet.gl.GL_POINTS, None, ('v2f', self.points))
     
     def track(self):
-        new = self.get_tracker()
-        print type(new)
-        for i in new:
-            points[i] = self.points[i] + new[i]
-            length = len(self.points[i])
-            if length >= 500*2:
-                self.points[i].pop(0)
-                self.points[i].pop(0)
-            allPoints += self.points[i]
-        allength = len(self.allpoints)
-        self.points_vert.resize(allength/2)
-        self.points_vert.vertices = self.allpoints
-
-    def get_tracker(self):
+        self.points += self.get_tracked()
+        if len(self.points)>=100*2:
+            for i in range(len(self.anchors)):
+                self.points.pop(0)
+                self.points.pop(0)
+        self.points_vert.resize(len(self.points)/2)
+        self.points_vert.vertices = self.points
+    
+    def get_tracked(self):
         points = []
-        for point in self.tracked:
+        for point in self.anchors:
             newx = int(self.center[0]) + int(point[0])
             newy = int(self.center[1]) + int(point[1])
-            points.append([newx, newy])
-        print type(points)
+            points += [newx, newy]
         return points
 
     def distance(self, x,y):
