@@ -13,6 +13,7 @@ class Body(object):
 
     def __init__(self, environment, x=0, y=0, heading=0, velocity = 0, density=1):
         self.environment = environment
+        self.dt=1/20.
         self.heading = 0
         self.velocity = array([0.,0.])
         self.center = array([x,y])
@@ -37,7 +38,7 @@ class Body(object):
         self.center = array([x,y])
 
     def shift(self,dx,dy):
-        self.center = array([self.center[0]+dx*1/20.,self.center[1]+dy*1/20.])
+        self.center = array([self.center[0]+dx*self.dt,self.center[1]+dy*self.dt])
 
     def rotate(self, angle):
         self.heading = angle
@@ -54,8 +55,8 @@ class Body(object):
             Tempddx,Tempddy=Centrp(self.center,self.velocity,math.sqrt((400-self.center[0])**2+(600-self.center[1])**2),(400,600))
             ddx=ddx+Tempddx
             ddy=ddy+Tempddy
-            self.velocity[0]=self.velocity[0]+ddx*1/20.
-            self.velocity[1]=self.velocity[1]+ddy*1/20.
+            self.velocity[0]=self.velocity[0]+ddx*self.dt
+            self.velocity[1]=self.velocity[1]+ddy*self.dt
             self.shift(self.velocity[0],self.velocity[1]) 
 
     def set_size(self, x, y): # can rewrite
