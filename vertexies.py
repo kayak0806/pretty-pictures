@@ -102,12 +102,12 @@ def update(dt):
         for obj in environment.obj_list:
             obj.update(dt)
 
-environment.obj_list.append(Circle(environment,200,400))
-environment.obj_list[-1].set_size(205,405)
-environment.obj_list[-1].joinToObject(fixPoint=(300,600),fixVelocity=(0,0))
-environment.obj_list.append(Circle(environment,200,450))
-environment.obj_list[-1].set_size(205,455)
-environment.obj_list[-2].joinToObject(body=environment.obj_list[-1])
+environment.obj_list.append(Circle(environment,200,500))
+environment.obj_list[-1].set_size(205,505)
+environment.obj_list[-1].joinToObject(fixPoint=(400,600),fixVelocity=(0,0))
+environment.obj_list.append(Circle(environment,180,400))
+environment.obj_list[-1].set_size(185,405)
+environment.obj_list[-1].joinToObject(body=environment.obj_list[-2])
 
 dt = 1/60.
 

@@ -58,11 +58,11 @@ class Body(object):
     def update(self,dt): 
         self.vert.vertices = self.get_points()
         if self.active:
-            self.velocity[1]=self.velocity[1]-9.81
             for body in self.freeConstraints:
-                self.velocity[0],self.velocity[1]=joinedBodies(self.center,self.velocity,body[0],body[1],body[2])
+                self.velocity[0],self.velocity[1]=joinedBodies(selfCenter=self.center,selfVelocity=self.velocity,otherCenter=body[0],otherVelocity=body[1],fixedDistance=body[2])
             for body in self.bodyConstraints:
-                self.velocity[0],self.velocity[1]=joinedBodies(self.center,self.velocity,body[0].center,body[0].velocity,body[1])
+                self.velocity[0],self.velocity[1]=joinedBodies(selfCenter=self.center,selfVelocity=self.velocity,otherBody=body[0],fixedDistance=body[1])
+            self.velocity[1]=self.velocity[1]-9.81
         self.shift(self.velocity[0],self.velocity[1])
             
 
