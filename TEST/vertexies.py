@@ -21,9 +21,9 @@ class Environment(object):
                           font_name='Times New Roman',
                           font_size=15,
                           batch = self.menu_batch,
-                          x=150, y=15,
+                          x=200, y=15,
                           anchor_x='left', anchor_y='center')
-        self.instructions = pyglet.text.Label('\'space\' to pause/unpause \t\t \'t\' to select \t\t \'c\' for circles \t \'s\' for squares \t \'r\' for rods',
+        self.instructions = pyglet.text.Label('\'space\' to pause/unpause \t\t \'T\' to select \t\t \'C\' for circles \t \'S\' for squares',
                           font_name='Times New Roman',
                           font_size=12,
                           batch = self.menu_batch,
@@ -73,8 +73,7 @@ def on_mouse_press(x, y, button, modifiers):
         environment.obj_list.append(Rod(environment,x,y))
     if mode == 'T': #select
         for obj in environment.obj_list:
-            if obj.is_inside(x,y):
-                obj.add_anchor(x,y)
+            print obj.is_inside(x,y)
         
 @window.event
 def on_mouse_drag(x, y, dx,dy,button, modifiers):
@@ -103,12 +102,12 @@ def update(dt):
         for obj in environment.obj_list:
             obj.update(dt)
 
-environment.obj_list.append(Circle(environment,200,500))
-environment.obj_list[-1].set_size(205,505)
-environment.obj_list[-1].joinToObject(fixPoint=(400,600),fixVelocity=(0,0))
-environment.obj_list.append(Circle(environment,180,400))
-environment.obj_list[-1].set_size(185,405)
-environment.obj_list[-1].joinToObject(body=environment.obj_list[-2])
+environment.obj_list.append(Circle(environment,200,400))
+environment.obj_list[-1].set_size(205,405)
+environment.obj_list[-1].joinToObject(fixPoint=(300,600),fixVelocity=(0,0))
+environment.obj_list.append(Circle(environment,200,450))
+environment.obj_list[-1].set_size(205,455)
+environment.obj_list[-2].joinToObject(body=environment.obj_list[-1])
 
 dt = 1/60.
 
