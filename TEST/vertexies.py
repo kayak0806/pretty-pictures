@@ -23,7 +23,7 @@ class Environment(object):
                           batch = self.menu_batch,
                           x=200, y=15,
                           anchor_x='left', anchor_y='center')
-        self.instructions = pyglet.text.Label('\'space\' to pause/unpause \t\t \'T\' to select \t\t \'C\' for circles \t \'S\' for squares',
+        self.instructions = pyglet.text.Label('\'space\' to pause/unpause \t\t \'t\' to select \t\t \'c\' for circles \t \'s\' for squares \t \'r\' for rods',
                           font_name='Times New Roman',
                           font_size=12,
                           batch = self.menu_batch,
@@ -34,6 +34,7 @@ class Environment(object):
         self.mode = 'T'     # modes are s -> square, c -> circle, R -> rod, T -> select
         self.obj_list = []
         self.batch = pyglet.graphics.Batch()
+        self.track_batch = pyglet.graphics.Batch()
 
     def update(self):
         if self.active:
@@ -52,6 +53,7 @@ class Environment(object):
     def draw(self):
         self.batch.draw()
         self.menu_batch.draw()
+        self.track_batch.draw()
         
 environment = Environment()
 
@@ -65,15 +67,22 @@ def on_draw():
 def on_mouse_press(x, y, button, modifiers):
     ''' Click to make a shape'''
     mode = environment.mode
-    if mode == 'S': #square
-        environment.obj_list.append(Square(environment,x,y))
-    if mode == 'C': #circle
-        environment.obj_list.append(Circle(environment,x,y))
-    if mode == 'R': #rod
-        environment.obj_list.append(Rod(environment,x,y))
     if mode == 'T': #select
         for obj in environment.obj_list:
-            print obj.is_inside(x,y)
+            if obj.is_inside(x,y):
+                obj.add_anchor(x,y)
+    else:
+        if mode == 'S': #square
+            environment.obj_list.append(Square(environment,x,y))
+        if mode == 'C': #circle
+            environment.obj_list.append(Circle(environment,x,y))
+        if mode == 'R': #rod
+            environment.obj_list.append(Rod(environment,x,y))
+        if len(environment.obj_list)==1:
+            environment.obj_list[-1].joinToObject(fixPoint=(400,600),fixVelocity=(0,0))
+        else:
+            environment.obj_list[-1].joinToObject(body=environment.obj_list[-2])
+ 
         
 @window.event
 def on_mouse_drag(x, y, dx,dy,button, modifiers):
@@ -101,14 +110,14 @@ def update(dt):
     if environment.active:
         for obj in environment.obj_list:
             obj.update(dt)
-
+'''
 environment.obj_list.append(Circle(environment,200,400))
 environment.obj_list[-1].set_size(205,405)
 environment.obj_list[-1].joinToObject(fixPoint=(300,600),fixVelocity=(0,0))
 environment.obj_list.append(Circle(environment,200,450))
 environment.obj_list[-1].set_size(205,455)
-environment.obj_list[-2].joinToObject(body=environment.obj_list[-1])
-
+environment.obj_list[-1].joinToObject(body=environment.obj_list[-2])
+'''
 dt = 1/60.
 
 pyglet.clock.schedule_interval(update, dt) # Schedules updates for all objects every 30th of a second (Float)
