@@ -20,15 +20,14 @@ class Body(object):
         self.density = density
         self.color = (0,0,255)
         self.active = False
-        self.anchors = [array([50,0]), array([50,math.pi/2])] # polar coords
-        self.add_anchor(100,100)
+        self.anchors = [array([0,0])] # polar coords
         self.track_points = self.get_tracked()
         self.track_vert = environment.track_batch.add(len(self.track_points)/2,
                     pyglet.gl.GL_POINTS, None, ('v2f', self.track_points))
     
     def track(self):
         self.track_points += self.get_tracked()
-        if len(self.track_points)>=100*2:
+        if len(self.track_points)>=200*2:
             for i in range(len(self.anchors)):
                 self.track_points.pop(0)
                 self.track_points.pop(0)

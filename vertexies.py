@@ -21,9 +21,9 @@ class Environment(object):
                           font_name='Times New Roman',
                           font_size=15,
                           batch = self.menu_batch,
-                          x=200, y=15,
+                          x=150, y=15,
                           anchor_x='left', anchor_y='center')
-        self.instructions = pyglet.text.Label('\'space\' to pause/unpause \t\t \'T\' to select \t\t \'C\' for circles \t \'S\' for squares',
+        self.instructions = pyglet.text.Label('\'space\' to pause/unpause \t\t \'t\' to select \t\t \'c\' for circles \t \'s\' for squares \t \'r\' for rods',
                           font_name='Times New Roman',
                           font_size=12,
                           batch = self.menu_batch,
@@ -69,14 +69,14 @@ def on_mouse_press(x, y, button, modifiers):
     mode = environment.mode
     if mode == 'S': #square
         environment.obj_list.append(Square(environment,x,y))
-
     if mode == 'C': #circle
         environment.obj_list.append(Circle(environment,x,y))
     if mode == 'R': #rod
         environment.obj_list.append(Rod(environment,x,y))
     if mode == 'T': #select
         for obj in environment.obj_list:
-            print obj.is_inside(x,y)
+            if obj.is_inside(x,y):
+                obj.add_anchor(x,y)
         
 @window.event
 def on_mouse_drag(x, y, dx,dy,button, modifiers):
