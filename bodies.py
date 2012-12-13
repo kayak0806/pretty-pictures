@@ -19,6 +19,7 @@ class Body(object):
         self.density = density
         self.color = (0,0,255,0,0,255,0,0,255,0,0,255)
         self.active = False
+        self.mates = [] # list of connected bodies
 
     def distance(self, x,y):
         xcenter = self.center[0]
